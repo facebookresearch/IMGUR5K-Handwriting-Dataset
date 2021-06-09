@@ -1,6 +1,8 @@
-## To run the code for downloading the urls and generate corresponding annotations : 
-Usage:
-      python download_imgur5k.py --dataset_info_dir <dir_with_annotaion_and_hashes> --output_dir <path_to_store_images>
+![Word Images](IMGUR5K_teaser.png)
+## IMGUR5K Handwriting Dataset 
+To run the code for downloading the urls and generate corresponding annotations : 
+
+Usage: python download_imgur5k.py --dataset_info_dir <dir_with_annotaion_and_hashes> --output_dir <path_to_store_images>
 
 ## Requirements
 IMGUR5K download code works with
