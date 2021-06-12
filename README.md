@@ -7,6 +7,7 @@ Usage: python download_imgur5k.py --dataset_info_dir <dir_with_annotaion_and_has
 ## Requirements
 IMGUR5K download code works with
 * Python3
+* Numpy
 
 
 ## Downloading images of IMGUR5K
