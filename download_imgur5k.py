@@ -21,11 +21,14 @@ Output:
 import argparse
 import hashlib
 import json
+import multiprocessing as mp
 import numpy as np
 import os
 import requests
 
+from concurrent import futures
 from PIL import Image
+
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Processing imgur5K dataset download...")
@@ -73,6 +76,34 @@ def _create_split_json(anno_json, _split_idx):
 
     return split_json
 
+
+def partial_func(index, output_dir):
+    """
+    Partial function for retrieving and saving image content.
+
+    Image content is comparing against the expected hash.
+    If image is invalid, or hash does not match, invalid url will be returned.
+    :param index: index of image to download
+    :param output_dir: directory to write successful images
+    :return: invalid_url or None
+    """
+    image_url = f'https://i.imgur.com/{index}.jpg'
+    img_data = requests.get(image_url).content
+    if len(img_data) < 100:
+        return image_url
+
+    with open(f'{output_dir}/{index}.jpg', 'wb') as handler:
+        handler.write(img_data)
+
+    compute_image_hash(f'{output_dir}/{index}.jpg')
+    if hash_dict[index] != compute_image_hash(f'{output_dir}/{index}.jpg'):
+        print(
+            f"For IMG: {index}, ref hash: {hash_dict[index]} != cur hash: {compute_image_hash(f'{output_dir}/{index}.jpg')}")
+        os.remove(f'{args.output_dir}/{index}.jpg')
+        return image_url
+    else:
+        return None
+
 def main():
     args = parse_args()
     os.makedirs(args.output_dir, exist_ok=True)
@@ -89,26 +120,17 @@ def main():
     tot_evals = 0
     num_match = 0
     invalid_urls = []
-    # Download the urls and save only the ones with valid hash o ensure underlying image has not changed
-    for index in list(hash_dict.keys()):
-        image_url = f'https://i.imgur.com/{index}.jpg'
-        img_data = requests.get(image_url).content
-        if len(img_data) < 100:
-            print(f"URL retrieval for {index} failed!!\n")
-            invalid_urls.append(image_url)
-            continue
-        with open(f'{args.output_dir}/{index}.jpg', 'wb') as handler:
-            handler.write(img_data)
 
-        compute_image_hash(f'{args.output_dir}/{index}.jpg')
-        tot_evals += 1
-        if hash_dict[index] != compute_image_hash(f'{args.output_dir}/{index}.jpg'):
-            print(f"For IMG: {index}, ref hash: {hash_dict[index]} != cur hash: {compute_image_hash(f'{args.output_dir}/{index}.jpg')}")
-            os.remove(f'{args.output_dir}/{index}.jpg')
-            invalid_urls.append(image_url)
-            continue
-        else:
+    executor = futures.ThreadPoolExecutor(max(mp.cpu_count() - 1, 1))
+    # Download the urls and save only the ones with valid hash o ensure underlying image has not changed
+    invalid_urls = list(executor.map(partial_func, [(key, args.output_dir) for key in list(hash_dict.keys())]))
+
+    for result in invalid_urls:
+        tot_evals +=1
+        if result is None:
             num_match += 1
+
+
 
     # Generate the final annotations file
     # Format: { "index_id" : {indexes}, "index_to_annotation_map" : { annotations ids for an index}, "annotation_id": { each annotation's info } }
