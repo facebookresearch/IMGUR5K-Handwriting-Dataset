@@ -57,3 +57,17 @@ See the [CONTRIBUTING](CONTRIBUTING.md) file for how to help out.
 
 ## License
 IMGUR5K is Creative Commons Attribution-NonCommercial 4.0 International Public licensed, as found in the LICENSE file.
+	
+## Citation
+If you find this data useful, please consider citing our paper: 
+
+Praveen Krishnan, Rama Kovvuri, Guan Pang, Boris Vassilev and Tal Hassner, [TextStyleBrush: Transfer of Text Aesthetics from a Single Example](https://arxiv.org/abs/2106.08385), arXiv: 2106.08385 2021.
+```
+@misc{krishnan2021textstylebrush,
+      title={TextStyleBrush: Transfer of Text Aesthetics from a Single Example}, 
+      author={Praveen Krishnan and Rama Kovvuri and Guan Pang and Boris Vassilev and Tal Hassner},
+      year={2021},
+      eprint={2106.08385},
+      archivePrefix={arXiv},
+}
+```
