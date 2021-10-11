@@ -51,6 +51,17 @@ the images and verifies the hash to the image to avoid data contamination.
 **NOTE:**
 Apart from the ~5K images employed in TextStyleBrush paper, ~4K more images are added to the dataset to foster the research in Handwritten Recognition.
 
+# Statistics
+| Description 	  	| Count  |
+| :-------------------	| :---	 |
+| # Page Images 	| 8,177 |
+| # Word Images 	| 230,573|
+| # Lexicons (case-sensitive) 	| 49,317|
+
+The ratio for train/val/test splits is 80\%:10\%:10\% at the level of page images and the details are provided in the respective json files created as part of the output.
+
+**Disclaimer:**
+The dataset is provided using public links to each image, and the availability of these images is controlled by IMGUR or the original user (who uploaded it).
 
 # Contribution
 See the [CONTRIBUTING](CONTRIBUTING.md) file for how to help out.
