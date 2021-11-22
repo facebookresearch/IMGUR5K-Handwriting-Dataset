@@ -114,7 +114,7 @@ def main():
     # Format: { "index_id" : {indexes}, "index_to_annotation_map" : { annotations ids for an index}, "annotation_id": { each annotation's info } }
     # Bounding boxes with '.' mean the annotations were not done for various reasons
 
-    _F = np.loadtxt(f'{args.dataset_info_dir}/imgur5k_data.lst', delimiter="\t", dtype=np.str)
+    _F = np.loadtxt(f'{args.dataset_info_dir}/imgur5k_data.lst', delimiter="\t", dtype=np.str, encoding="utf-8")
     anno_json = {}
 
     anno_json['index_id'] = {}
