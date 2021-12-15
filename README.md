@@ -37,7 +37,10 @@ the images and verifies the hash to the image to avoid data contamination.
 * imgur5k_annotations.json : 
 	* json file with image annotation mappings -> dowloaded to dataset_info_dir
 		* Format: { "index_id" : {indexes}, "index_to_annotation_map" : { annotations ids for an index}, "annotation_id": { each annotation's info } }
-		* Annotation ID: bounding_box in xywha format
+		* Annotation ID: bounding_box in (xc,yc,w,h,a) format in absolute floating points coordinates.
+			* (xc, yc) is the center of the rotated box
+			* (w, h) is the width and height
+			* (a) is the angle in degrees counterclockwise.
 		* Bounding boxes with '.' mean the annotations were not done for various reasons
 * imgur5k_annotations_train.json : 
 	* json file with image annotation mappings of TRAIN split only -> dowloaded to dataset_info_dir
