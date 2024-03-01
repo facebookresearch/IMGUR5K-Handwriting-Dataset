@@ -89,10 +89,16 @@ def main():
     tot_evals = 0
     num_match = 0
     invalid_urls = []
+    headers = {
+        'User-Agent':
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
+            'AppleWebKit/537.36 (KHTML, like Gecko) '
+            'Chrome/58.0.3029.110 Safari/537.3'
+    }
     # Download the urls and save only the ones with valid hash o ensure underlying image has not changed
     for index in list(hash_dict.keys()):
         image_url = f'https://i.imgur.com/{index}.jpg'
-        img_data = requests.get(image_url).content
+        img_data = requests.get(image_url, headers=headers).content
         if len(img_data) < 100:
             print(f"URL retrieval for {index} failed!!\n")
             invalid_urls.append(image_url)
