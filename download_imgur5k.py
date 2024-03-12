@@ -89,10 +89,16 @@ def main():
     tot_evals = 0
     num_match = 0
     invalid_urls = []
+    headers = {
+        'User-Agent':
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
+            'AppleWebKit/537.36 (KHTML, like Gecko) '
+            'Chrome/58.0.3029.110 Safari/537.3'
+    }
     # Download the urls and save only the ones with valid hash o ensure underlying image has not changed
     for index in list(hash_dict.keys()):
         image_url = f'https://i.imgur.com/{index}.jpg'
-        img_data = requests.get(image_url).content
+        img_data = requests.get(image_url, headers=headers).content
         if len(img_data) < 100:
             print(f"URL retrieval for {index} failed!!\n")
             invalid_urls.append(image_url)
@@ -114,7 +120,7 @@ def main():
     # Format: { "index_id" : {indexes}, "index_to_annotation_map" : { annotations ids for an index}, "annotation_id": { each annotation's info } }
     # Bounding boxes with '.' mean the annotations were not done for various reasons
 
-    _F = np.loadtxt(f'{args.dataset_info_dir}/imgur5k_data.lst', delimiter="\t", dtype=np.str, encoding="utf-8")
+    _F = np.loadtxt(f'{args.dataset_info_dir}/imgur5k_data.lst', delimiter="\t", dtype=str, encoding="utf-8")
     anno_json = {}
 
     anno_json['index_id'] = {}
@@ -142,7 +148,7 @@ def main():
     # Now split the annotations json in train, validation and test jsons
     splits = ['train', 'val', 'test']
     for split in splits:
-        _split_idx = np.loadtxt(f'{args.dataset_info_dir}/{split}_index_ids.lst', delimiter="\n", dtype=np.str)
+        _split_idx = np.loadtxt(f'{args.dataset_info_dir}/{split}_index_ids.lst', dtype=str)
         split_json = _create_split_json(anno_json, _split_idx)
         json.dump(split_json, open(f'{args.dataset_info_dir}/imgur5k_annotations_{split}.json', 'w'), indent=4)
 
